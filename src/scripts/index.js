@@ -2,55 +2,11 @@ let tasks = [];
 const inputField = document.querySelector(".task-input");
 const taskList = document.querySelector(".task-list");
 const addTaskButton = document.querySelector(".add-task-button");
+const loadTasksButton = document.querySelector(".load-button");
 const saveTasksButton = document.querySelector(".save-button");
 const tasksCounter = document.querySelector(".task-counter");
 let idCounter = 0;
 let edit_id = null;
-
-function addTask() {
-    if (inputField.value === '') {
-        alert("Добавьте описание к задаче!");
-    } else {
-        let text = inputField.value;
-        tasks.push({
-            "id": idCounter++,
-            "text": text,
-            "completed": false,
-            "date": new Date()
-        });
-    }
-    inputField.value = '';
-    showTasks();
-}
-
-function saveData() {
-
-}
-
-const removeTask = (task_id) => {
-    tasks = tasks.filter(task => task.id !== task_id);
-    showTasks();
-}
-
-const editTask = (task_id) => {
-    edit_id = task_id;
-    let task = tasks.filter(task => task.id === task_id); 
-    inputField.value = task[0].text;
-    addTaskButton.innerText = 'Изменить';
-}
-
-const crossTask = (task_id) => {
-    tasks.map(item => {
-        if (item.id == task_id) {
-            if (item["completed"]) {
-                item["completed"] = false
-            } else {
-                item["completed"] = true;
-            }
-        }
-    })
-    showTasks();
-}
 
 const drawCompletedTask = (task) => {
     return `<li class="task-list__item task-list__item_status_completed" >
@@ -94,19 +50,7 @@ const drawActiveTask = (task) => {
 </li>`;
 }
 
-const countActiveTasks = () => {
-    return tasks.filter(task => !task.completed).length;
-}
-
-const sortTasksByDate = () => {
-    let activeTasks = tasks.filter(task => task.completed);
-    let completedTasks = tasks.filter(task => !task.completed)
-    activeTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
-    completedTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
-    return completedTasks.concat(activeTasks);
-}
-
-function showTasks() {
+const showTasks = () => {
     let listInnerText = '';
     let listPlaceholder = document.createElement("p");
     listPlaceholder.classList.add("task-list__placeholder");
@@ -127,7 +71,74 @@ function showTasks() {
     }
 }
 
-addTaskButton.addEventListener( "click", ()=>{
+const addTask = () => {
+    if (inputField.value === '') {
+        alert("Добавьте описание к задаче!");
+    } else {
+        let text = inputField.value;
+        tasks.push({
+            "id": idCounter++,
+            "text": text,
+            "completed": false,
+            "date": new Date()
+        });
+    }
+    inputField.value = '';
+    showTasks();
+}
+
+const saveData = () => {
+
+}
+
+const loadData = () => {
+
+}
+
+const removeTask = (task_id) => {
+    tasks = tasks.filter(task => task.id !== task_id);
+    showTasks();
+}
+
+const editTask = (task_id) => {
+    edit_id = task_id;
+    let task = tasks.filter(task => task.id === task_id); 
+    inputField.value = task[0].text;
+    addTaskButton.innerText = 'Изменить';
+}
+
+const crossTask = (task_id) => {
+    tasks.map(item => {
+        if (item.id == task_id) {
+            if (item["completed"]) {
+                item["completed"] = false
+            } else {
+                item["completed"] = true;
+            }
+        }
+    })
+    showTasks();
+}
+
+const countActiveTasks = () => {
+    return tasks.filter(task => !task.completed).length;
+}
+
+const sortTasksByDate = () => {
+    let activeTasks = tasks.filter(task => task.completed);
+    let completedTasks = tasks.filter(task => !task.completed)
+    activeTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
+    completedTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+    return completedTasks.concat(activeTasks);
+}
+
+loadTasksButton.addEventListener("click", () => {
+
+})
+
+saveTasksButton
+
+addTaskButton.addEventListener( "click", () => {
     if(edit_id !== null){
         tasks.map(item => {
             if(item.id === edit_id){

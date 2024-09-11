@@ -28,49 +28,15 @@
             <div class="panel">
                 <input type="text" class="task-input" placeholder="Новая задача">
                 <div class="wrapper">
+                    <div class="wrapper-inner">
+                        <button class="load-button">Загрузить</button>
+                        <button class="save-button">Сохранить</button>
+                    </div>
+                    
                     <button class="add-task-button">Добавить</button>
-                    <button class="save-button" onclick="saveData()">Сохранить</button>
                 </div>
             </div>
-            <ul class="task-list">
-                <!-- <p class="task-list__placeholder task-list__placeholder_hidden">Список пуст</p> -->
-                <!-- <li class="task-list__item">
-                    <p class="task-list__text">Новая задача</p>
-                    <div class="task-list__flag">
-                        <span class="material-symbols-outlined">
-                            check_circle
-                        </span>
-                    </div>
-                    <div class="task-list__edit-button">
-                        <span class="material-symbols-outlined">
-                            border_color
-                        </span>
-                    </div>
-                    <div class="task-list__delete-button">
-                        <span class="material-symbols-outlined">
-                            delete
-                        </span>
-                    </div>
-                </li>
-                <li class="task-list__item task-list__item_status_completed">
-                    <p class="task-list__text">Задача выполнена</p>
-                    <div class="task-list__flag">
-                        <span class="material-symbols-outlined">
-                            check_circle
-                        </span>
-                    </div>
-                    <div class="task-list__edit-button">
-                        <span class="material-symbols-outlined">
-                            border_color
-                        </span>
-                    </div>
-                    <div class="task-list__delete-button">
-                        <span class="material-symbols-outlined">
-                            delete
-                        </span>
-                    </div>
-                </li> -->
-            </ul>
+            <ul class="task-list"></ul>
         </div>
     </section>
     <script src="scripts/index.js"></script>
