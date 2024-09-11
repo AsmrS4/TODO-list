@@ -1,2 +1,1 @@
-# TODO-list
-laboratory work
+Лабораторная работа

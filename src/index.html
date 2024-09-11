@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple TODO List</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <section class="main">
+        <p class="title">TODO:
+            <span class="task-counter">0</span>
+        </p>
+        <div class="container">
+            <div class="panel">
+                <input type="text" class="task-input" placeholder="Новая задача">
+                <div class="wrapper">
+                    <button class="add-task-button">Добавить</button>
+                    <button class="save-button" onclick="saveData()">Сохранить</button>
+                </div>
+            </div>
+            <ul class="task-list">
+                <!-- <p class="task-list__placeholder task-list__placeholder_hidden">Список пуст</p> -->
+                <!-- <li class="task-list__item">
+                    <p class="task-list__text">Новая задача</p>
+                    <div class="task-list__flag">
+                        <span class="material-symbols-outlined">
+                            check_circle
+                        </span>
+                    </div>
+                    <div class="task-list__edit-button">
+                        <span class="material-symbols-outlined">
+                            border_color
+                        </span>
+                    </div>
+                    <div class="task-list__delete-button">
+                        <span class="material-symbols-outlined">
+                            delete
+                        </span>
+                    </div>
+                </li>
+                <li class="task-list__item task-list__item_status_completed">
+                    <p class="task-list__text">Задача выполнена</p>
+                    <div class="task-list__flag">
+                        <span class="material-symbols-outlined">
+                            check_circle
+                        </span>
+                    </div>
+                    <div class="task-list__edit-button">
+                        <span class="material-symbols-outlined">
+                            border_color
+                        </span>
+                    </div>
+                    <div class="task-list__delete-button">
+                        <span class="material-symbols-outlined">
+                            delete
+                        </span>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+    </section>
+    <script src="scripts/index.js"></script>
+</body>
+
+</html>
