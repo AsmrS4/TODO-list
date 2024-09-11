@@ -124,7 +124,7 @@ const sortTasksByDate = () => {
     return completedTasks.concat(activeTasks);
 }
 
-async function loadData() {
+loadTasksButton.addEventListener("click", () => {
     let file = document.querySelector('#file').files[0];
     let reader = new FileReader();
     reader.readAsText(file);
@@ -133,22 +133,19 @@ async function loadData() {
         tasks = data.data;
         idCounter = data.counter;
     }
-    console.log(tasks)
-}
-loadTasksButton.addEventListener("click", async() => {
-    await loadData().then(showTasks());
+    showTasks();
 })
 
 saveTasksButton.addEventListener("click", () => {
     let structure = {
-        "data":[],
+        "data": [],
         "counter": 0
     }
     console.log(JSON.stringify(tasks))
     structure.data = tasks;
     structure.counter = idCounter;
     console.log(JSON.stringify(structure))
-    let blob = new Blob([JSON.stringify(structure)], {type:'text/plain'});
+    let blob = new Blob([JSON.stringify(structure)], { type: 'text/plain' });
     console.log(blob);
     let link = document.createElement('a');
     link.setAttribute('href', URL.createObjectURL(blob));
