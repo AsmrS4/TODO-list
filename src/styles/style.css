@@ -59,8 +59,9 @@ body {
     align-items: center;
     flex-direction: row;
     justify-content: space-between;
-    width: 280px;
+    width: 55%;
 }
+
 
 .container {
     max-width: 768px;
@@ -172,7 +173,7 @@ body {
     width: 140px;
 }
 
-.save-button, .load-button {
+.save-button, .load-button, .choose-button {
     width: 130px;
     height: 50px;
     border-radius: 5px;
@@ -185,7 +186,35 @@ body {
     cursor: pointer;
 }
 
-.save-button:hover, .load-button:hover {
+.choose-button {
+    position: relative;
+    display: inline-block;
+}
+
+.choose-button span {
+    position: relative;
+	display: inline-block;
+    font-size: 18px;
+    font-weight: 400;
+    vertical-align: middle;
+	text-align: center;
+   
+	height: 50px;
+	padding: 10px 20px;
+	box-sizing: border-box;
+	border: none;
+}
+
+.choose-button input[type=file] {
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    display: block;
+    height: 50px;
+    width: 130px;
+}
+
+.save-button:hover, .load-button:hover, .choose-button:hover {
     color: var(--default-color);
     width: 140px;
 }

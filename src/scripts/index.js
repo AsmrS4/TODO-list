@@ -87,14 +87,6 @@ const addTask = () => {
     showTasks();
 }
 
-const saveData = () => {
-
-}
-
-const loadData = () => {
-
-}
-
 const removeTask = (task_id) => {
     tasks = tasks.filter(task => task.id !== task_id);
     showTasks();
@@ -102,7 +94,7 @@ const removeTask = (task_id) => {
 
 const editTask = (task_id) => {
     edit_id = task_id;
-    let task = tasks.filter(task => task.id === task_id); 
+    let task = tasks.filter(task => task.id === task_id);
     inputField.value = task[0].text;
     addTaskButton.innerText = 'Изменить';
 }
@@ -132,16 +124,42 @@ const sortTasksByDate = () => {
     return completedTasks.concat(activeTasks);
 }
 
-loadTasksButton.addEventListener("click", () => {
-
+async function loadData() {
+    let file = document.querySelector('#file').files[0];
+    let reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = () => {
+        let data = JSON.parse(reader.result);
+        tasks = data.data;
+        idCounter = data.counter;
+    }
+    console.log(tasks)
+}
+loadTasksButton.addEventListener("click", async() => {
+    await loadData().then(showTasks());
 })
 
-saveTasksButton
+saveTasksButton.addEventListener("click", () => {
+    let structure = {
+        "data":[],
+        "counter": 0
+    }
+    console.log(JSON.stringify(tasks))
+    structure.data = tasks;
+    structure.counter = idCounter;
+    console.log(JSON.stringify(structure))
+    let blob = new Blob([JSON.stringify(structure)], {type:'text/plain'});
+    console.log(blob);
+    let link = document.createElement('a');
+    link.setAttribute('href', URL.createObjectURL(blob));
+    link.setAttribute('download', 'data');
+    link.click();
+})
 
-addTaskButton.addEventListener( "click", () => {
-    if(edit_id !== null){
+addTaskButton.addEventListener("click", () => {
+    if (edit_id !== null) {
         tasks.map(item => {
-            if(item.id === edit_id){
+            if (item.id === edit_id) {
                 item.text = inputField.value;
             }
         })

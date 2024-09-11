@@ -17,6 +17,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="styles/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -28,11 +29,17 @@
             <div class="panel">
                 <input type="text" class="task-input" placeholder="Новая задача">
                 <div class="wrapper">
+
                     <div class="wrapper-inner">
+                        <div class="choose-button">
+                            <input type="file" id="file">
+                            <span>Выбрать</span>
+                        </div>
                         <button class="load-button">Загрузить</button>
                         <button class="save-button">Сохранить</button>
                     </div>
-                    
+
+
                     <button class="add-task-button">Добавить</button>
                 </div>
             </div>
