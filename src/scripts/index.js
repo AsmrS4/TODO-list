@@ -5,24 +5,34 @@ const addTaskButton = document.querySelector(".add-task-button");
 const loadTasksButton = document.querySelector(".load-button");
 const saveTasksButton = document.querySelector(".save-button");
 const tasksCounter = document.querySelector(".task-counter");
-let idCounter = 0;
 let edit_id = null;
+
+
+const getData = async () => {
+    const fetched = await fetch("http://localhost:8000/api/task/", {
+        method: "GET",
+   }) 
+   .then(result => result.json())
+   .then(json => {return json})
+   tasks = fetched
+   return tasks
+}
 
 const drawCompletedTask = (task) => {
     return `<li class="task-list__item task-list__item_status_completed" >
     <p class="task-list__text">${task.text}</p>
     <div class="task-list__flag">
-        <span class="material-symbols-outlined" onclick='crossTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="crossTask('${task.id}')">
             check_circle
         </span>
     </div>
     <div class="task-list__edit-button">
-        <span class="material-symbols-outlined" onclick='editTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="editTask('${task.id}')">
             border_color
         </span>
     </div>
     <div class="task-list__delete-button">
-        <span class="material-symbols-outlined" onclick='removeTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="removeTask('${task.id}')">
             delete
         </span>
     </div>
@@ -33,140 +43,148 @@ const drawActiveTask = (task) => {
     return `<li class="task-list__item">
     <p class="task-list__text">${task.text}</p>
     <div class="task-list__flag">
-        <span class="material-symbols-outlined" onclick='crossTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="crossTask('${task.id}')">
             check_circle
         </span>
     </div>
     <div class="task-list__edit-button">
-        <span class="material-symbols-outlined" onclick='editTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="editTask('${task.id}')">
             border_color
         </span>
     </div>
     <div class="task-list__delete-button">
-        <span class="material-symbols-outlined" onclick='removeTask(${task.id})'>
+        <span class="material-symbols-outlined" onclick="removeTask('${task.id}')">
             delete
         </span>
     </div>
 </li>`;
 }
 
-const showTasks = () => {
+const showTasks = async() => {
     let listInnerText = '';
     let listPlaceholder = document.createElement("p");
     listPlaceholder.classList.add("task-list__placeholder");
     listPlaceholder.innerHTML = "Список пуст";
-    tasksCounter.innerHTML = countActiveTasks();
-    if (tasks.length === 0) {
-        taskList.innerHTML = '';
-        taskList.classList.add("task-list_empty");
-        taskList.append(listPlaceholder);
-        return;
-    } else {
-        taskList.classList.remove("task-list_empty");
-        let sortedList = sortTasksByDate();
-        sortedList.forEach((task) => {
-            listInnerText += (task["completed"]) ? drawCompletedTask(task) : drawActiveTask(task);
-        });
-        taskList.innerHTML = listInnerText;
-    }
+    tasks = await getData().then(()=> {
+        if (tasks.length === 0) {
+            taskList.innerHTML = '';
+            taskList.classList.add("task-list_empty");
+            taskList.append(listPlaceholder);
+            return;
+        } else {
+            taskList.classList.remove("task-list_empty");
+            let sortedList = sortTasksByDate();
+            sortedList.forEach((task) => {
+                listInnerText += (task["completed"]) ? drawCompletedTask(task) : drawActiveTask(task);
+            });
+            taskList.innerHTML = listInnerText;
+        }
+    }) 
 }
 
-const addTask = () => {
+const newTaskResponse = (text) => {
+    fetch(`http://localhost:8000/api/task/new?text=${text}`, {
+            method: "POST",
+            body: JSON.stringify({
+                "text": text,
+            })
+        }).then(()=>{
+            inputField.value = '';
+            showTasks();
+        })     
+}
+
+const addTask = async(text) => {
     if (inputField.value === '') {
         alert("Добавьте описание к задаче!");
     } else {
-        let text = inputField.value;
-        tasks.push({
-            "id": idCounter++,
-            "text": text,
-            "completed": false,
-            "date": new Date()
-        });
-    }
-    inputField.value = '';
-    showTasks();
+        newTaskResponse(text)
+    } 
 }
 
-const removeTask = (task_id) => {
-    tasks = tasks.filter(task => task.id !== task_id);
-    showTasks();
+const removeTask = async(task_id) => {
+    await fetch("http://localhost:8000/api/task/delete/" + task_id, {
+            method: "DELETE",
+        })
+        .then(()=>{
+            showTasks();
+        })
+}
+
+const editResponse = (task_id, text) =>{
+    console.log(text)
+    fetch(`http://localhost:8000/api/task/edit/${task_id}?text=${text}`, {
+        method: "PUT",
+        body: JSON.stringify({
+                "text": text
+            })
+    })
+    .then(()=> {
+        showTasks()
+    })
 }
 
 const editTask = (task_id) => {
-    edit_id = task_id;
-    let task = tasks.filter(task => task.id === task_id);
-    inputField.value = task[0].text;
-    addTaskButton.innerText = 'Изменить';
-}
-
-const crossTask = (task_id) => {
-    tasks.map(item => {
-        if (item.id == task_id) {
-            if (item["completed"]) {
-                item["completed"] = false
-            } else {
-                item["completed"] = true;
-            }
-        }
+    edit_id = task_id
+    fetch(`http://localhost:8000/api/task/${task_id}`, {
+        method: "GET"
     })
-    showTasks();
+    .then(result => {
+        return result.json()
+    })
+    .then(json => {
+        return json
+    }) 
+    .then(task => {
+        edit_id = task_id
+        inputField.value = task.text;
+        addTaskButton.innerText = 'Изменить';
+    })
 }
 
-const countActiveTasks = () => {
-    return tasks.filter(task => !task.completed).length;
+const crossTask = async(task_id) => { 
+    fetch(`http://localhost:8000/api/task/${task_id}`, {
+        method: "GET"
+    })
+    .then(result => {
+        return result.json()
+    })
+    .then(json => {
+        return json
+    })
+    .then(task => {
+        fetch(`http://localhost:8000/api/task/${task_id}/status?completed=${!task.completed}` , {
+                method: "POST",
+                body: JSON.stringify({
+                    "completed":  !task.completed
+                })
+             })
+    })
+    .then(()=>{
+        showTasks()
+    })
 }
 
 const sortTasksByDate = () => {
     let activeTasks = tasks.filter(task => task.completed);
     let completedTasks = tasks.filter(task => !task.completed)
-    activeTasks.sort((a, b) => new Date(b.date) - new Date(a.date));
-    completedTasks.sort((a, b) => new Date(a.date) - new Date(b.date));
+    activeTasks.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    completedTasks.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     return completedTasks.concat(activeTasks);
 }
 
-loadTasksButton.addEventListener("click", () => {
-    let file = document.querySelector('#file').files[0];
-    let reader = new FileReader();
-    reader.readAsText(file);
-    reader.onload = () => {
-        let data = JSON.parse(reader.result);
-        tasks = data.data;
-        idCounter = data.counter;
-    }
-    showTasks();
-})
-
-saveTasksButton.addEventListener("click", () => {
-    let structure = {
-        "data": [],
-        "counter": 0
-    }
-    console.log(JSON.stringify(tasks))
-    structure.data = tasks;
-    structure.counter = idCounter;
-    console.log(JSON.stringify(structure))
-    let blob = new Blob([JSON.stringify(structure)], { type: 'text/plain' });
-    console.log(blob);
-    let link = document.createElement('a');
-    link.setAttribute('href', URL.createObjectURL(blob));
-    link.setAttribute('download', 'data');
-    link.click();
-})
-
 addTaskButton.addEventListener("click", () => {
-    if (edit_id !== null) {
-        tasks.map(item => {
-            if (item.id === edit_id) {
-                item.text = inputField.value;
-            }
-        })
-        edit_id = null;
-    } else {
-        addTask();
-    }
-    inputField.value = "";
-    addTaskButton.innerText = "Добавить";
-    showTasks();
+    getData()
+    .then(() => {
+        if (edit_id !== null) {
+            editResponse(edit_id, $(".task-input").val())
+            edit_id = null;
+        } else {
+            addTask($(".task-input").val());
+        }
+        inputField.value = "";
+        addTaskButton.innerText = "Добавить";
+    })
 })
 
 showTasks();
